@@ -30,9 +30,9 @@
 		H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
 		H.equip_or_collect(new /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector(H), slot_l_store)
 		if(H.backbag == 1)
-			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
+			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.extended_survival_gear(H))
 			H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/device/healthanalyzer(H))
 		else
-			H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
+			H.equip_or_collect(new H.species.extended_survival_gear(H.back), slot_in_backpack)
 			H.equip_or_collect(new /obj/item/device/healthanalyzer(H.back), slot_in_backpack)
 		return 1

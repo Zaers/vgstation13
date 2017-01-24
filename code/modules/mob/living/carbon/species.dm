@@ -51,6 +51,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	var/breath_type = "oxygen"   // Non-oxygen gas breathed, if any.
 	var/survival_gear = /obj/item/weapon/storage/box/survival // For spawnin'.
+	var/extended_survival_gear = /obj/item/weapon/storage/box/survival/engineer //For spawning with better internals
 
 	var/cold_level_1 = 260  // Cold damage level 1 below this point.
 	var/cold_level_2 = 200  // Cold damage level 2 below this point.
@@ -353,8 +354,8 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/vox/r_voxboney.dmi' //Do bones deform noticeably?
 	known_languages = list(LANGUAGE_VOX, LANGUAGE_CLATTER)
 
-	survival_gear = /obj/item/weapon/storage/box/survival/vox
-
+	survival_gear = /obj/item/weapon/storage/box/survival/vox //These are a subtype of skeletons and don't breathe, why do they get survival gear anyways?
+	extended_survival_gear = /obj/item/weapon/storage/box/survival/vox //They don't actually get a bigger N2 tank because they already get one by default
 	primitive = /mob/living/carbon/monkey/vox //for now
 
 	warning_low_pressure = 50
@@ -579,6 +580,7 @@ var/global/list/whitelisted_species = list("Human")
 	anatomy_flags = HAS_SWEAT_GLANDS
 
 	survival_gear = /obj/item/weapon/storage/box/survival/vox
+	extended_survival_gear = /obj/item/weapon/storage/box/survival/vox //Same as skelevox
 
 	primitive = /mob/living/carbon/monkey/vox
 
