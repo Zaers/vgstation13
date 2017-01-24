@@ -39,6 +39,9 @@ players2.sqlite
 # Map rendering
 /maprendering/renderoutput/*
 
+# Map backups created by dreammaker
+/maps/backup/*
+
 # Backup maps created by maptools
 *.dmm.backup
 
@@ -54,3 +57,9 @@ players2.sqlite
 
 # Investigate logs that have an annoying tendency to generate during testing
 /data/investigate/*
+
+# Text editor temp files
+\#*\#
+*~*
+.#*
+*.swp
