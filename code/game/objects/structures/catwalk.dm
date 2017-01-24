@@ -7,6 +7,7 @@
 	anchored = 1.0
 	plane = ABOVE_PLATING_PLANE
 	layer = CATWALK_LAYER
+	mouse_opacity = 2
 
 	canSmoothWith = "/obj/structure/catwalk=0"
 
