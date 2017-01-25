@@ -107,7 +107,7 @@ var/global/automation_types=typesof(/datum/automation) - /datum/automation
 
 /datum/automation/Topic(var/href, var/list/href_list)
 	var/ghost_flags = 0
-	if(parent.ghost_write)
+	if(parent.ghost_write)  //this is just some (poor) copypasta of the original machinery Topic()'s checks
 		ghost_flags |= PERMIT_ALL
 
 	if(!canGhostWrite(usr, parent, "", ghost_flags))
@@ -313,7 +313,7 @@ var/global/automation_types=typesof(/datum/automation) - /datum/automation
 
 	. += "<b>ELSE:</b> (<a href=\"?src=\ref[src];add=else\">Add</a>)"
 
-	if(children_then.len)
+	if(children_else.len)
 		. += "<ul>"
 		for(var/datum/automation/stmt in children_else)
 			. += {"<li>
@@ -327,6 +327,8 @@ var/global/automation_types=typesof(/datum/automation) - /datum/automation
 
 /datum/automation/if_statement/Topic(var/href, var/list/href_list)
 	. = ..(href, href_list - list("add", "remove", "reset")) // So we can do sanity but not make it trigger on these specific hrefs overriden with shitcode here.
+	if(.)
+		return 1
 	if(href_list["add"])
 		var/new_child = selectValidChildFor(usr)
 		if(!new_child)
