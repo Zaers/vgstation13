@@ -154,9 +154,12 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	else
 		dirn = dirnew
 	for(var/obj/structure/cable/LC in F)
-		if(LC.d2 == dirn && LC.d1 == 0)
-			to_chat(user, "<span class='warning'>There already is a cable at that position.</span>")
-			return
+		if(LC.d1 == 0)
+			if(LC.d2 == dirn)
+				to_chat(user, "<span class='warning'>There already is a cable at that position.</span>")
+				return
+			else
+				return cable_join(LC, user)
 
 	var/obj/structure/cable/C = getFromPool(/obj/structure/cable, F)
 	C.cableColor(_color)
