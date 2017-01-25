@@ -366,29 +366,33 @@ Class Procs:
 		return 1
 	if(href_list["close"])
 		return
-	var/ghost_flags=0
-	if(ghost_write)
-		ghost_flags |= PERMIT_ALL
-	if(!canGhostWrite(usr,src,"",ghost_flags))
-		if(usr.restrained() || usr.lying || usr.stat)
-			return 1
-		if (!usr.dexterity_check())
-			to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
-			return 1
-		var/turf/T = get_turf(usr)
-		if(!isAI(usr) && T.z != z)
-			if(usr.z != map.zCentcomm)
-				to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
-				return 1
-		if ((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
-			return 1
-	else if(!custom_aghost_alerts)
-		log_adminghost("[key_name(usr)] screwed with [src] ([href])!")
-
+	if(!can_use_topic(usr, href))
+		return 1
 	src.add_fingerprint(usr)
 	src.add_hiddenprint(usr)
 
 	return handle_multitool_topic(href,href_list,usr)
+
+/obj/machinery/proc/can_use_topic(var/mob/user, var/href)
+	var/ghost_flags=0
+	if(ghost_write)
+		ghost_flags |= PERMIT_ALL
+	if(!canGhostWrite(user,src,"",ghost_flags))
+		if(user.restrained() || user.lying || user.stat)
+			return 0
+		if (!user.dexterity_check())
+			to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
+			return 0
+		var/turf/T = get_turf(user)
+		if(!isAI(user) && T.z != z)
+			if(user.z != map.zCentcomm)
+				to_chat(user, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
+				return 0
+		if ((!in_range(src, user) || !istype(src.loc, /turf)) && !istype(user, /mob/living/silicon))
+			return 0
+	else if(!custom_aghost_alerts)
+		log_adminghost("[key_name(usr)] screwed with [src] ([href])!")
+	return 1
 
 /obj/machinery/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
