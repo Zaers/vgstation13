@@ -295,3 +295,6 @@
 
 /obj/item/projectile/beam/pulse/drone
 	damage = 7
+
+/mob/living/simple_animal/hostile/retaliate/malf_drone/vault
+	speak = list() //Cuts down on spam

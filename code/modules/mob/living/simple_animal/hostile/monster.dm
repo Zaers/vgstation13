@@ -123,6 +123,11 @@
 	qdel(src)
 	return
 
+
+/mob/living/simple_animal/hostile/monster/cyber_horror/quiet
+	speak = list()
+
+
 /mob/living/simple_animal/hostile/monster/cyber_horror/Vox
 	name = "vox cyber horror"
 	desc = "What was once a vox, twisted and warped by machine."
