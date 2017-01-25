@@ -310,8 +310,8 @@ var/list/impact_master = list()
 
 			spawn(3)
 				T.overlays -= impact
-
-			playsound(T, impact_sound, 30, 1)
+			if(impact_sound)
+				playsound(T, impact_sound, 30, 1)
 
 	if(istype(A,/turf))
 		for(var/obj/O in A)
@@ -569,7 +569,8 @@ var/list/impact_master = list()
 /obj/item/projectile/proc/rebound(var/atom/A)//Projectiles bouncing off walls and obstacles
 	var/turf/T = get_turf(src)
 	var/turf/W = get_turf(A)
-	playsound(T, bounce_sound, 30, 1)
+	if(bounce_sound)
+		playsound(T, bounce_sound, 30, 1)
 	reflected = 1
 	var/orientation = SOUTH
 	if(T == W)

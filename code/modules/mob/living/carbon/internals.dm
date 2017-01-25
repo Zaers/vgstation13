@@ -22,7 +22,7 @@
 /mob/living/carbon/proc/toggle_internals(var/mob/living/user, var/obj/item/weapon/tank/T)
 	if(user.incapacitated())
 		return
-	
+
 	if(internal)
 		internal.add_fingerprint(user)
 		internal = null
@@ -53,8 +53,10 @@
 					breathes = H.species.breath_type
 				if(user != src)
 					to_chat(user, "<span class='warning'>\The [src] does not have \an [breathes] tank.</span>")
+					return
 				else
 					to_chat(user, "<span class='warning'>You don't have \an [breathes] tank.</span>")
+					return
 		internal = T
 		T.add_fingerprint(user)
 		if(internals)
