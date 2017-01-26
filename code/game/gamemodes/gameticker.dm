@@ -142,13 +142,10 @@ var/datum/controller/gameticker/ticker
 	job_master.DivideOccupations() //Distribute jobs
 	var/can_continue = src.mode.pre_setup()//Setup special modes
 	if(!can_continue)
-		current_state = GAME_STATE_PREGAME
-		to_chat(world, "<B>Error setting up [master_mode].</B> Reverting to pre-game lobby.")
-		log_admin("The gamemode setup for [mode.name] errored out.")
-		world.log << "The gamemode setup for [mode.name] errored out."
+		message_admins("The gamemode setup for [mode.name] errored out. Defaulting to extended")
+		world.log << "The gamemode setup for [mode.name] errored out. Defaulting to extended"
 		del(mode)
-		job_master.ResetOccupations()
-		return 0
+		mode = new /datum/game_mode/extended
 
 	if(hide_mode)
 		var/list/modes = new
