@@ -23,6 +23,7 @@ var/list/admin_verbs_admin = list(
 	/datum/admins/proc/announce,		/*priority announce something to all clients.*/
 	/client/proc/colorooc,				/*allows us to set a custom colour for everythign we say in ooc*/
 	/client/proc/admin_ghost,			/*allows us to ghost/reenter body at will*/
+	/client/proc/reset_view_range		/*allows us to reset our zoom to the default*/
 	/client/proc/toggle_view_range,		/*changes how far we can see*/
 	/datum/admins/proc/view_txt_log,	/*shows the server log (diary) for today*/
 	/datum/admins/proc/view_atk_log,	/*shows the server combat-log, doesn't do anything presently*/
@@ -424,6 +425,13 @@ var/list/admin_verbs_mod = list(
 			body.key = "@[key]"	//Haaaaaaaack. But the people have spoken. If it breaks; blame adminbus
 		feedback_add_details("admin_verb","O") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+/client/proc/reset_view_range() //Might not really need to be admin only, but is here in case you want to reset your view after aghosting
+	set category = "Admin"
+	set name = "Reset View Range"
+	if(!holder)
+		return
+	changeView(7) //7 is the default view range, for reference
+	return 0 //We don't need to log this in feedback really
 
 /client/proc/invisimin()
 	set name = "Invisimin"
