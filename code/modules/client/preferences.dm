@@ -1673,6 +1673,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	user << browse(null, "window=saves")
 
 /datum/preferences/proc/configure_special_roles(var/dat, var/mob/user)
+	usr = user //So in some cases the usr in the topic was null, this somehow fixes that
 	dat+={"<form method="get">
 	<input type="hidden" name="src" value="\ref[src]" />
 	<input type="hidden" name="preference" value="set_roles" />
@@ -1772,7 +1773,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	return dat
 
 /datum/preferences/proc/SetRoles(var/mob/user, var/list/href_list)
-	// We just grab the role from the POST(?) data.
+	// We just grab the role from the GET data.
 	var/updated = 0
 	for(var/role_id in special_roles)
 		if(!(role_id in href_list))
