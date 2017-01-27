@@ -718,8 +718,8 @@ var/list/mechtoys = list(
 			to_chat(usr, "<span class='warning'>For safety reasons the automated supply shuttle cannot transport live organisms, classified nuclear weaponry or homing beacons.</span>")
 		else if(supply_shuttle.at_station)
 			supply_shuttle.moving = -1
-			supply_shuttle.sell()
 			supply_shuttle.send()
+			supply_shuttle.sell()
 		else
 			supply_shuttle.moving = 1
 			supply_shuttle.buy()
