@@ -85,6 +85,7 @@
 	)
 
 	var/list/enabled_jobs = list()
+	var/list/mining_secrets_blocked_area = list(/area/mine/explored, /area/vox_trading_post) //Places where mining secrets shouldn't spawn
 
 	//Map elements that should be loaded together with this map. Stuff like the holodeck areas, etc.
 	var/list/load_map_elements = list()
