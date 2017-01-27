@@ -37,8 +37,9 @@ proc/check_complex_placement(var/turf/T,var/size_x,var/size_y,var/ignore_walls=0
 	surroundings |= range(7, locate(T.x,T.y+size_y,T.z))
 	surroundings |= range(7, locate(T.x+size_x,T.y+size_y,T.z))
 
-	if(locate(/area/mine/explored) in surroundings)			// +5s are for view range
-		return 0
+	for(var/area_type in map.mining_secrets_blocked_area)
+		if(locate(area_type) in surroundings)			// +5s are for view range
+			return 0
 
 	if(locate(/turf/space) in surroundings)
 		return 0
@@ -51,9 +52,6 @@ proc/check_complex_placement(var/turf/T,var/size_x,var/size_y,var/ignore_walls=0
 		return 0
 	*/
 
-	// /vg/: Stop spawning shit inside of the vox hideout
-	if(locate(/turf/simulated/wall) in surroundings && !ignore_walls)
-		return 0
 	return 1
 
 proc/make_mining_asteroid_secret()
