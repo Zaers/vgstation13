@@ -133,7 +133,7 @@
 /obj/machinery/power/supermatter/singularity_act(current_size, obj/machinery/singularity/S)
 	var/prints = ""
 	if(src.fingerprintshidden)
-		prints = ", all touchers : " + src.fingerprintshidden
+		prints = ", all touchers : [list2params(src.fingerprintshidden)]" //bad copypasta
 	SetUniversalState(/datum/universal_state/supermatter_cascade)
 	S.expand(STAGE_SUPER, 1)
 	log_admin("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
