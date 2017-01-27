@@ -117,18 +117,16 @@ var/const/ALLOW_CENTCOMM = FALSE
 	// Note for future developer: If you have tiles on the map with random or dynamic icons this hash check will fail
 	// every time. You'll have to modify this code to generate a unique hash for your object.
 	// Don't forget to modify the minimap generation code to use a default icon (or skip generation altogether).
-	for(var/i = x1 to x2)
-		for(var/r = y1 to y2)
-			var/turf/tile = locate(i, r, z)
+	for(var/s = x1, s <= x2, s++)
+		for(var/r = y1, r <= y2, r++)
+			var/atom/tile = locate(s, r, z)
 			if      (istype(tile.loc, /area/asteroid) || istype(tile.loc, /area/mine/unexplored) || istype(tile, /turf/unsimulated/mineral) || (isspace(tile.loc) && istype(tile, /turf/unsimulated/floor/asteroid)))
 				temp = "/area/asteroid"
 			else if (istype(tile.loc, /area/mine) && istype(tile, /turf/unsimulated/floor/asteroid))
 				temp = "/area/mine/explored"
 			else if (tile.loc.type == /area/start || (tile.type == /turf/space && !(locate(/obj/structure/lattice) in tile)) || istype(tile, /turf/space/transit))
 				temp = "/turf/space"
-				if (locate(/obj/structure/catwalk) in tile)
 
-				else
 			else if (tile.type == /turf/space)
 				if (locate(/obj/structure/catwalk) in tile)
 					temp = "/obj/structure/lattice/catwalk"
@@ -173,78 +171,78 @@ var/const/ALLOW_CENTCOMM = FALSE
 		testing("MINIMAP: Generating minimap for z-level [z].")
 
 		var/i = 0
-		var/icon/turf_icon
-		var/icon/obj_icon
-		var/old_icon
-		var/old_icon_state
-		var/old_dir
 		var/new_icon
 		var/new_icon_state
 		var/new_dir
 
-		for(var/s = x1 to x2)
-			for(var/r = y1 to y2)
+		for(var/s = x1, s <= x2, s++)
+			for(var/r = y1, r <= y2, r++)
 				var/turf/tile = locate(s, r, z)
-				if (tile.flags & NO_MINIMAP)
+				if (tile.turf_flags & NO_MINIMAP) //Checks split into their own lines for readability
+					continue
+				if(tile.loc.type == /area/start)
+					continue
+				if(tile.type == /turf/space)
+					if((locate(/obj/structure/lattice) in tile) || locate(/obj/structure/transit_tube) in tile)
+						//good to go
+					else
+						continue
+				if(tile.type == /turf/space/transit)
+					continue
+				if(istype(tile.loc, /area/vault))
 					continue
 
-				if (tile.loc.type != /area/start && (tile.type != /turf/space || (locate(/obj/structure/lattice) in tile) || (locate(/obj/structure/transit_tube) in tile)) && !istype(tile, /turf/space/transit) && !istype(tile.loc, /area/vault))
-					if (istype(tile.loc, /area/asteroid) || istype(tile.loc, /area/mine/unexplored) || istype(tile, /turf/unsimulated/mineral) || (isspace(tile.loc) && istype(tile, /turf/unsimulated/floor/asteroid)))
-						new_icon = 'icons/turf/walls.dmi'
-						new_icon_state = "rock"
-						new_dir = 2
-					else if (istype(tile.loc, /area/mine) && istype(tile, /turf/unsimulated/floor/asteroid))
-						new_icon = 'icons/turf/floors.dmi'
-						new_icon_state = "asteroid"
-						new_dir = 2
-					else if (tile.type == /turf/space)
-						obj = locate(/obj/structure/lattice) in tile
+				if (istype(tile.loc, /area/asteroid) \
+				 || istype(tile.loc, /area/mine/unexplored) \
+				 || istype(tile, /turf/unsimulated/mineral) \
+				 || (isspace(tile.loc) && istype(tile, /turf/unsimulated/floor/asteroid)))
+					new_icon = 'icons/turf/walls.dmi'
+					new_icon_state = "rock"
+					new_dir = 2
+				else if (istype(tile.loc, /area/mine) && istype(tile, /turf/unsimulated/floor/asteroid))
+					new_icon = 'icons/turf/floors.dmi'
+					new_icon_state = "asteroid"
+					new_dir = 2
+				else if (tile.type == /turf/space)
+					obj = locate(/obj/structure/lattice) in tile
 
-						if (!obj)
-							obj = locate(/obj/structure/transit_tube) in tile
-
-						ASSERT(obj != null)
-
-						if (obj)
-							new_icon = obj.icon
-							new_dir = obj.dir
-							new_icon_state = obj.icon_state
-					else if (tile.type == /turf/simulated/floor/plating && (locate(/obj/structure/shuttle/window) in tile))
-						new_icon = 'icons/obj/structures.dmi'
-						new_dir = 2
-						new_icon_state = "swindow"
-					else
-						new_icon = tile.icon
-						new_icon_state = tile.icon_state
-						new_dir = tile.dir
-
-					if (new_icon != old_icon || new_icon_state != old_icon_state || new_dir != old_dir)
-						old_icon = new_icon
-						old_icon_state = new_icon_state
-						old_dir = new_dir
-
-						turf_icon = new/icon(new_icon, new_icon_state, new_dir, 1, 0)
-						turf_icon.Scale(ICON_SIZE, ICON_SIZE)
-
-					if (tile.type != /turf/space || (locate(/obj/structure/lattice) in tile))
+					if (!obj)
 						obj = locate(/obj/structure/transit_tube) in tile
 
-						if (obj)
-							obj_icon = new/icon(obj.icon, obj.icon_state, obj.dir, 1, 0)
-							obj_icon.Scale(ICON_SIZE, ICON_SIZE)
-							turf_icon.Blend(obj_icon, ICON_OVERLAY)
+					ASSERT(obj != null)
 
-					map_icon.Blend(turf_icon, ICON_OVERLAY, ((tile.x - 1) * ICON_SIZE), ((tile.y - 1) * ICON_SIZE))
-
-					if ((++i) % 512 == 0)
-						sleep(1) // deliberate delay to avoid lag spikes
-
-					if ((i % 1024) == 0)
-						testing("MINIMAP: Generated [s*(y2-y1+1)+r] of [(y2-y1+1)*(x2-x1+1)] tiles.")
+					new_icon = obj.icon
+					new_dir = obj.dir
+					new_icon_state = obj.icon_state
+				else if (istype(tile, /turf/simulated/floor/plating) && locate(/obj/structure/shuttle/window) in tile)
+					new_icon = 'icons/obj/structures.dmi'
+					new_dir = 2
+					new_icon_state = "swindow"
 				else
-					sleep(-1) // avoid sleeping if possible: prioritize pending procs
+					new_icon = tile.icon
+					new_icon_state = tile.icon_state
+					new_dir = tile.dir
 
-		testing("MINIMAP: Generated [(y2-y1+1)*(x2-x1+1)] of [(y2-y1+1)*(x2-x1+1)] tiles.")
+				var/icon/turf_icon = new(new_icon, new_icon_state, new_dir, 1, 0)
+				turf_icon.Scale(ICON_SIZE, ICON_SIZE)
+
+				if (tile.type != /turf/space || (locate(/obj/structure/lattice) in tile))
+					obj = locate(/obj/structure/transit_tube) in tile
+
+					if (obj)
+						var/icon/obj_icon = new(obj.icon, obj.icon_state, obj.dir, 1, 0)
+						obj_icon.Scale(ICON_SIZE, ICON_SIZE)
+						turf_icon.Blend(obj_icon, ICON_OVERLAY)
+
+				map_icon.Blend(turf_icon, ICON_OVERLAY, ((s - 1) * ICON_SIZE), ((r - 1) * ICON_SIZE))
+				i++
+				if ((i % 512) == 0)
+					sleep(1) // deliberate delay to avoid lag spikes
+
+				if ((i % 1024) == 0)
+					testing("MINIMAP: Generated [s*(y2-y1+1)+r] of [(y2-y1+1)*(x2-x1+1)] tiles.")
+
+		testing("MINIMAP: Generated [(y2-y1+1)*(x2-x1+1)] of [(y2-y1+1)*(x2-x1+1)] tiles. Processed [i] tiles.")
 
 		// BYOND BUG: map_icon now contains 4 directions? Create a new icon with only a single state.
 		var/icon/result_icon = new/icon()
