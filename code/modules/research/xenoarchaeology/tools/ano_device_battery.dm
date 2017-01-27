@@ -130,11 +130,12 @@
 		else
 			shutdown()
 
-/obj/item/weapon/anodevice/proc/shutdown_emission()
+/obj/item/weapon/anodevice/proc/shutdown_emission(var/silent = 0)
 	if(activated)
 		activated = 0
 		timing = 0
-		src.visible_message("<span class='notice'>[bicon(src)] [src] buzzes.</span>", "[bicon(src)]<span class='notice'>You hear something buzz.</span>")
+		if(!silent)
+			src.visible_message("<span class='notice'>[bicon(src)] [src] buzzes.</span>", "[bicon(src)]<span class='notice'>You hear something buzz.</span>")
 
 		cooldown = archived_time / 2
 
@@ -177,7 +178,7 @@
 			src.investigation_log(I_ARTIFACT, "|| anomaly battery effect([inserted_battery.battery_effect]) || emission started by [key_name(usr)]")
 			inserted_battery.battery_effect.ToggleActivate(1)
 	if(href_list["shutdown"])
-		activated = 0
+		shutdown_emission(1)
 	if(href_list["starttimer"])
 		timing = 1
 		archived_time = time
