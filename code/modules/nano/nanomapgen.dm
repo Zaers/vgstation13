@@ -27,7 +27,7 @@
 		return
 	message_admins("[ckey]/[src] started nanoui map generation")
 	log_admin("[ckey]/[src] started nanoui map generation")
-	var/turf/T = get_turf(src)
+	var/turf/T = get_turf(src.mob) //Clients aren't on turfs
 	nanomapgen_DumpTile(1,1, T.z)
 
 /client/proc/nanomapgen_DumpImageAll()
@@ -96,12 +96,9 @@
 				world.log << "NanoMapGen: [count] tiles done"
 				sleep(5)
 
-	world.log << "NanoMapGen: sending nanoMap.png to client"
-
+	world.log << "NanoMapGen: sending nanoMap[currentZ].png to client"
+	fcopy(Tile, "nano/images/genned/[map.map_dir]/nanoMap[currentZ].png")
 	usr << browse(Tile, "window=picture;file=nanoMap[currentZ].png;display=0")
-	var/F =file("nano/images/genned/[map.map_dir]/nanoMap[currentZ].png")
-	fdel(F)
-	fcopy(Tile, F)
 	world.log << "NanoMapGen: z-level [currentZ] Done."
 
 	if (Tile.Width() != NANOMAP_MAX_ICON_DIMENSION || Tile.Height() != NANOMAP_MAX_ICON_DIMENSION)
