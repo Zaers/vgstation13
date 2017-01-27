@@ -245,6 +245,9 @@
 	else
 		return 0
 
+/mob/living/extinguish()
+	ExtinguishMob() //Call the specialized proc to handle icon updates and what things like that
+
 /mob/living/proc/ExtinguishMob()
 	if(on_fire)
 		on_fire = 0
