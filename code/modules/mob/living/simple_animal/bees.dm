@@ -195,8 +195,8 @@
 				target = null
 				target_turf = null
 			if(strength > 5)
-				//calm down and spread out a little
-				var/turf/T = get_turf(pick(orange(src,1)))
+				//calm down
+				var/turf/T = get_turf(src)
 				var/mob/living/simple_animal/bee/B = getFromPool(/mob/living/simple_animal/bee,T)
 				B.strength = rand(1,5)
 				src.strength -= B.strength
