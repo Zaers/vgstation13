@@ -154,7 +154,7 @@ mob/verb/test()
 	winset(hclient.client, "browser_\ref[src].browser", list2params(list("parent" = "browser_\ref[src]", "type" = "browser", "pos" = "0,0", "size" = "[width]x[height]", "anchor1" = "0,0", "anchor2" = "100,100", "use-title" = "true", "auto-format" = "false")))
 
 	sendAssets(hclient.client)
-	
+
 /datum/html_interface/proc/sendAssets(var/client/client)
 	send_asset(client, "jquery.min.js")
 	send_asset(client, "bootstrap.min.js")
@@ -242,8 +242,9 @@ mob/verb/test()
 		else
 			src.createWindow(hclient)
 			hclient.is_loaded = FALSE
-			hclient.client << output(replacetextEx(replacetextEx(file2text(default_html_file), "\[hsrc\]", "\ref[src]"), "</head>", "[head]</head>"), "browser_\ref[src].browser")
+			hclient.client << output(replacetextEx(replacetextEx(file2text(default_html_file), "\[hsrc\]", "\ref[src]"), "<head>", "[head]</head>"), "browser_\ref[src].browser")
 			winshow(hclient.client, "browser_\ref[src]", TRUE)
+			hclient.interface = src
 
 		while (hclient.client && hclient.active && !hclient.is_loaded) sleep(2)
 
@@ -251,6 +252,7 @@ mob/verb/test()
 	hclient = getClient(hclient)
 
 	if (istype(hclient))
+		hclient.interface = null
 		if (src.clients)
 			src.clients.Remove(hclient.client)
 
@@ -278,7 +280,11 @@ mob/verb/test()
 			if (!src.clients)
 				src.clients = new/list()
 			if (!(client in src.clients))
+				var/client/C = client
 				src.clients[client] = new/datum/html_interface_client(client)
+				var/datum/html_interface_client/HC = clients[client]
+				HC.interface = src
+				C.html_clients += clients[client]
 
 		if (src.clients && (client in src.clients))
 			return src._getClient(src.clients[client])
