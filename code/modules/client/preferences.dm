@@ -71,7 +71,7 @@ var/const/MAX_SAVE_SLOTS = 8
 #define GET_RANDOM_JOB 0
 #define BE_ASSISTANT 1
 #define RETURN_TO_LOBBY 2
-#define POLLED_LIMIT	300
+#define POLLED_LIMIT	50
 
 /datum/preferences
 	//doohickeys for savefiles
@@ -588,6 +588,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	if(appearance_isbanned(user))
 		dat += "<b>You are banned from using custom names and appearances. You can continue to adjust your characters, but you will be randomised once you join the game.</b><br>"
 
+	var/override_buttons = 0
 	switch(current_tab)
 		if(CHARACTER_SETUP)
 			dat = setup_character_options(dat, user)
@@ -596,16 +597,21 @@ var/const/MAX_SAVE_SLOTS = 8
 		if(GENERAL_SETUP)
 			dat = setup_special(dat, user)
 		if(SPECIAL_ROLES_SETUP)
+			override_buttons = 1
 			dat = configure_special_roles(dat, user)
 
-	dat += "<br><hr>"
 
-	if(!IsGuestKey(user.key))
-		dat += {"<center><a href='?_src_=prefs;preference=load'>Undo</a> |
-			<a href='?_src_=prefs;preference=save'>Save Setup</a> | "}
 
-	dat += {"<a href='?_src_=prefs;preference=reset_all'>Reset Setup</a>
-		</center></body></html>"}
+	if(!override_buttons) //This is slightly spaghettified, but it's bettter than dealing with js
+		dat += "<br><hr>"
+
+		if(!IsGuestKey(user.key))
+			dat += {"<center><a href='?_src_=prefs;preference=load'>Undo</a> |
+				<a href='?_src_=prefs;preference=save'>Save Setup</a> | "}
+
+		dat += {"<a href='?_src_=prefs;preference=reset_all'>Reset Setup</a>
+			</center></body></html>"}
+
 
 	//user << browse(dat, "window=preferences;size=560x580")
 	var/datum/browser/popup = new(user, "preferences", "<div align='center'>Character Setup</div>", 680, 640)
@@ -1674,7 +1680,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 /datum/preferences/proc/configure_special_roles(var/dat, var/mob/user)
 	usr = user //So in some cases the usr in the topic was null, this somehow fixes that
-	dat+={"<form method="get">
+	dat+={"<form method="get" name="RoleSetup" id="RoleSetup">
 	<input type="hidden" name="src" value="\ref[src]" />
 	<input type="hidden" name="preference" value="set_roles" />
 	<h1>Special Role Preferences</h1>
@@ -1766,10 +1772,20 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	dat += {"</tbody>
 		</table>
 		<br>
-		<input type="submit" value="Submit" />
-		<input type="reset" value="Reset" />
-		</form>
+		<button type="submit" value="Submit">Submit</button>
+		<button type="reset" value="Reset">Reset</Button>
 		<br>"}
+
+	dat += "<br><hr>"
+
+	if(!IsGuestKey(user.key))
+		dat += {"<center><a href='?_src_=prefs;preference=load'>Undo</a> |
+			<button type="submit" value="Submit">Save Setup</button> | "}
+	dat += {"<a href='?_src_=prefs;preference=reset_all'>Reset Setup</a>
+		</form>
+		</center></body></html>
+
+		"}
 	return dat
 
 /datum/preferences/proc/SetRoles(var/mob/user, var/list/href_list)
@@ -1787,10 +1803,13 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 	if(!updated)
 		to_chat(user, "<span class='warning'>No changes to role preferences found!</span>")
-		return 0
 
-	save_preferences_sqlite(user, user.ckey)
-	save_character_sqlite(user.ckey, user, default_slot)
+	if(world.timeofday >= (lastPolled + POLLED_LIMIT))
+		save_preferences_sqlite(user, user.ckey)
+		save_character_sqlite(user.ckey, user, default_slot)
+		lastPolled = world.timeofday
+	else
+		to_chat(user, "You need to wait [round((((lastPolled + POLLED_LIMIT) - world.timeofday) / 10))] seconds before you can save again.")
 	return 1
 
 /datum/preferences/Topic(href, href_list)

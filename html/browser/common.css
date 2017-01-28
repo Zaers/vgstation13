@@ -23,9 +23,27 @@ a, a:link, a:visited, a:active, .linkOn, .linkOff
 	padding: 1px 4px 1px 4px;
 	margin: 0 2px 0 0;
 	cursor:default;
+	vertical-align: text-bottom;
 }
 
-a.nobg, a.nobg:link, a.nobg:visited, a.nobg:active
+
+button 
+{
+	color: #ffffff;
+	background: #40628a;
+	text-decoration: none;
+	border: 0px solid #161616;
+	padding: 1px 4px 1px 4px;
+	margin: 0 0 0 0;
+	cursor: default;
+	font-size: 12px;
+	width: auto; 
+	height: 16px;
+	overflow: visible;
+	line-height: 0px;
+	vertical-align: 0px;
+}
+a.nobg, a.nobg:link, button.nobg, a.nobg:visited, a.nobg:active
 {
 	color: #ffffff;
 	text-decoration: none;
@@ -41,7 +59,7 @@ a.nobg:hover
 	color:#40628a;
 }
 
-a:hover
+a:hover, button:hover
 {
 	color: #40628a;
 	background: #ffffff;
