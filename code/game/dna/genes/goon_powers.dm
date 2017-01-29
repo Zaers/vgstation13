@@ -425,7 +425,7 @@
 	range = SELFCAST
 
 	charge_type = Sp_RECHARGE
-	charge_max = 60
+	charge_max = 70 //We take our charge at start, so keep distance in mind while changing this value
 
 	spell_flags = INCLUDEUSER
 	invocation_type = SpI_NONE
@@ -438,6 +438,7 @@
 	override_base = "genetic"
 
 /spell/targeted/leap/cast(list/targets, mob/user)
+	take_charge(user, 0)
 	for(var/mob/living/target in targets)
 		if (istype(target.loc,/mob/) || target.lying || target.stunned || target.locked_to)
 			to_chat(target, "<span class='warning'>You can't jump right now!</span>")
@@ -503,7 +504,7 @@
 			container.pixel_x = 0
 			container.pixel_y = 0
 
-	return
+	return 1 //Stop the automatic take cahrge, we already handled it
 
 ////////////////////////////////////////////////////////////////////////
 
