@@ -63,8 +63,8 @@ emp_act
 	if(!type)
 		return 0
 	var/protection = 0
-	var/list/body_parts = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes)
-	for(var/bp in body_parts)
+	var/list/possible_armor = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes)
+	for(var/bp in possible_armor)
 		if(!bp)
 			continue
 		if(bp && istype(bp ,/obj/item/clothing))
