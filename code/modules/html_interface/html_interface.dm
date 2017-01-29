@@ -242,7 +242,7 @@ mob/verb/test()
 		else
 			src.createWindow(hclient)
 			hclient.is_loaded = FALSE
-			hclient.client << output(replacetextEx(replacetextEx(file2text(default_html_file), "\[hsrc\]", "\ref[src]"), "<head>", "[head]</head>"), "browser_\ref[src].browser")
+			hclient.client << output(replacetextEx(replacetextEx(file2text(default_html_file), "\[hsrc\]", "\ref[src]"), "</head>", "[head]</head>"), "browser_\ref[src].browser")
 			winshow(hclient.client, "browser_\ref[src]", TRUE)
 			hclient.interface = src
 
