@@ -87,18 +87,30 @@
 
 			if(href_list["inject1"])
 				var/obj/item/weapon/implant/I = locate(href_list["inject1"])
-				if(I)
-					I.activate(1)
+				if(!I || !istype(I, /obj/item/weapon/implant/chem) || !I.implanted)
+					return
+				var/turf/Tr = get_turf(I)
+				if(!Tr || Tr.z != src.z)
+					return
+				I.activate(1)
 
 			else if(href_list["inject5"])
 				var/obj/item/weapon/implant/I = locate(href_list["inject5"])
-				if(I)
-					I.activate(5)
+				if(!I || !istype(I, /obj/item/weapon/implant/chem) || !I.implanted)
+					return
+				var/turf/Tr = get_turf(I)
+				if(!Tr || Tr.z != src.z)
+					return
+				I.activate(5)
 
 			else if(href_list["inject10"])
 				var/obj/item/weapon/implant/I = locate(href_list["inject10"])
-				if(I)
-					I.activate(10)
+				if(!I || !istype(I, /obj/item/weapon/implant/chem) || !I.implanted)
+					return
+				var/turf/Tr = get_turf(I)
+				if(!Tr || Tr.z != src.z)
+					return
+				I.activate(10)
 
 			else if(href_list["lock"])
 				if(src.allowed(usr))
@@ -111,7 +123,12 @@
 				if(!warning)
 					return
 				var/obj/item/weapon/implant/I = locate(href_list["warn"])
-				if((I)&&(I.imp_in))
+				if(!I || !istype(I, /obj/item/weapon/implant/tracking) || !I.implanted)
+					return
+				var/turf/Tr = get_turf(I)
+				if(!Tr || Tr.z != src.z)
+					return
+				if(I.imp_in)
 					var/mob/living/carbon/R = I.imp_in
 					to_chat(R, "<span class='good'>You hear a voice in your head saying: '[warning]'</span>")
 
