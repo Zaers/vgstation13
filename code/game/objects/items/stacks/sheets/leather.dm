@@ -153,5 +153,6 @@
 	if(environment.temperature >= drying_threshold_temperature)
 		wetness--
 		if(wetness <= 0)
+			var/amt = amount
 			if(src.use(amount))
-				drop_stack(/obj/item/stack/sheet/leather, src.loc, amount)
+				drop_stack(/obj/item/stack/sheet/leather, src.loc, amt)
