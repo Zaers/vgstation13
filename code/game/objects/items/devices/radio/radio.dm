@@ -135,6 +135,8 @@
 	if (href_list["open"])
 		var/mob/target = locate(href_list["open"])
 		var/mob/living/silicon/ai/A = locate(href_list["open2"])
+		if(A != usr)
+			return
 		if(A && target)
 			A.open_nearest_door(target)
 		return
@@ -142,6 +144,8 @@
 	if (href_list["track"])
 		var/mob/target = locate(href_list["track"])
 		var/mob/living/silicon/ai/A = locate(href_list["track2"])
+		if(A != usr)
+			return
 		if(A && target)
 			A.ai_actual_track(target)
 		return
@@ -149,6 +153,8 @@
 	else if (href_list["faketrack"])
 		var/mob/target = locate(href_list["track"])
 		var/mob/living/silicon/ai/A = locate(href_list["track2"])
+		if(A != usr)
+			return
 		if(A && target)
 
 			A:cameraFollow = target

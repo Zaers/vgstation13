@@ -157,9 +157,11 @@
 					for(var/turf/T in orange(loc,4))
 						throwzone += T
 					for(var/obj/I in target.contents)
+						target.drop_from_inventory(I)
 						I.forceMove(loc)
 						I.throw_at(pick(throwzone),rand(2,5),0)
-					hgibs(loc, target.viruses, target.dna, target.species.flesh_color, target.species.blood_color)
+					target.death(1)
+					target.ghostize(0)
 					qdel(target)
 					target = null
 					for(var/i = 1;i<=6;i++)

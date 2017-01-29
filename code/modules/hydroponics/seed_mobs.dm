@@ -104,7 +104,7 @@
 /datum/seed/Topic(var/href, var/list/href_list)
 	if(href_list["signup"])
 		var/mob/dead/observer/O = locate(href_list["signup"])
-		if(!O)
+		if(!O || O != usr)
 			return
 
 		volunteer(O)
