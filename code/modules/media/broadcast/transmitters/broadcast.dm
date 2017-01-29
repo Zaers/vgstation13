@@ -58,8 +58,9 @@
 		hook_media_sources()
 	if(on)
 		update_on()
-	power_connection.power_changed.Add(src,"cable_power_change")
-	power_connection.connect()
+	if(power_connection)
+		power_connection.power_changed.Add(src,"cable_power_change")
+		power_connection.connect()
 	update_icon()
 
 /obj/machinery/media/transmitter/broadcast/wrenchAnchor(mob/user)
@@ -169,6 +170,7 @@
 		overlays += image(icon = icon, icon_state = "broadcaster linked")
 
 /obj/machinery/media/transmitter/broadcast/proc/update_on()
+	cable_power_change()
 	if(on)
 		visible_message("\The [src] hums as it begins pumping energy into the air!")
 		connect_frequency()

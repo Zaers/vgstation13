@@ -101,17 +101,12 @@ var/global/list/battery_online =	list(
 	// Input
 	var/excess = surplus()
 
-	if (charging)
-		if (excess >= chargelevel) // If there's power available, try to charge
-			var/load = min((capacity - charge) / SMESRATE, chargelevel) // Charge at set rate, limited to spare capacity
+	if (charging) //Try to charge UP TO set charge level
+		var/load = min((capacity - charge) / SMESRATE, min(excess, chargelevel)) // Charge at set rate, limited to spare capacity
 
-			charge += load * SMESRATE // Increase the charge
+		charge += load * SMESRATE // Increase the charge
 
-			add_load(load) // Add the load to the terminal side network
-
-		else
-			charging = FALSE
-			chargecount = 0
+		add_load(load) // Add the load to the terminal side network
 
 	else
 		if (chargemode)
@@ -119,7 +114,7 @@ var/global/list/battery_online =	list(
 				charging = TRUE
 				chargecount = 0
 
-			if (excess > chargelevel)
+			if (excess)
 				chargecount++
 			else
 				chargecount = 0
