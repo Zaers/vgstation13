@@ -394,6 +394,10 @@
 		var/datum/locking_category/category = locked_atoms[AM]
 		category.update_lock(AM)
 
+	if(locked_to)
+		if(loc != locked_to.loc)
+			locked_to.unlock_atom(src) //unbuckle if forcemoved and not in the same loc of the thing you're locked to
+
 	update_client_hook(loc)
 
 	// Update on_moved listeners.
