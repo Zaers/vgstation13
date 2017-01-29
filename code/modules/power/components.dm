@@ -340,7 +340,8 @@
 
 	if(isnull(powernet) || !powernet || !cable)
 		return 0						// if not, then not powered.
-
+	if(!cable.powernet || cable.powernet.avail <= 0) //No power on the cable itself
+		return 0
 	if((machine_flags & FIXED2WORK) && !parent.anchored)
 		return 0
 
