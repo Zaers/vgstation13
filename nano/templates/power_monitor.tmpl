@@ -1,0 +1,39 @@
+<style type="text/css">
+	span.area
+	{
+		display: block;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		width: auto;
+	}
+	table
+	{
+	table-layout: fixed;
+	}
+</style>
+{{if data.connected}}
+	<table class="table" width="100%;">
+	<colgroup><col style="width: 180px;"/><col/></colgroup>
+	<tr><td><strong>Total power:</strong></td><td>{{:data.totalPower}} W</td></tr>
+	<tr><td><strong>Total load:</strong></td><td>{{:data.totalLoad}} W</td></tr>
+	<tr><td><strong>Total demand:</strong></td><td>{{:data.totalDemand}} W</td></tr>
+	</table>
+	<table width="100%;">
+	<colgroup><col style="width: auto;"/><col style="width: 60px;"/><col style="width: 60px;"/><col style="width: 60px;"/><col style="width: 80px;"/><col style="width: 80px;"/><col style="width: 20px;"/></colgroup>
+	<thead><tr><th>Area</th><th align="right">Eqp.</th><th align="right">Lgt.</th><th align="right">Env.</th><th align="right">Load</th><th align="right">Cell</th><th></th></tr></thead>
+	<tbody>
+	{{for data.APClist}}
+		<tr><td><span class='area'>{{>value.areaName}}</span></td>
+		<td align="right">{{:value.equipment}}</span></td> 
+		<td align="right">{{:value.lighting}}</span></td> 
+		<td align="right">{{:value.environment}}</span></td> 
+		<td align="right">{{:value.powerUsed}}</td> 
+		<td align="right">{{:value.cellCharge}}</td>
+		</tr>
+	{{/for}}
+	</tbody>
+	</table>
+{{else}}
+	<span class='bad'>No connection to power network.</span>
+{{/if}}
