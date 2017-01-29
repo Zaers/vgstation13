@@ -647,7 +647,7 @@
 	desc = "A box of seven glass Christmas ornaments. Color not included."
 	icon_state = "ornament_box"
 	foldable = null
-	starting_materials = list(MAT_GLASS = 2500)		//needed for autolathe production
+	starting_materials = list(MAT_GLASS = 26250)		//needed for autolathe production //Value is set to 7 glass sheets to prevent any glass duping
 
 /obj/item/weapon/storage/box/ornaments/New()
 	..()
