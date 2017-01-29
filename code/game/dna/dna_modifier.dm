@@ -647,6 +647,8 @@
 		if(connected.contains_husk())
 			to_chat(usr, "<span class='notice'>The organism inside does not have DNA.</span>")
 			return 1
+		if(irradiating) //stop spamming this thing
+			return
 		irradiating = src.radiation_duration
 		var/lock_state = src.connected.locked
 		src.connected.locked = 1//lock it
@@ -749,6 +751,8 @@
 			to_chat(usr, "<span class='notice'>The organism inside does not have DNA.</span>")
 			return 1
 		var/block = src.connected.occupant.dna.GetUISubBlock(src.selected_ui_block,src.selected_ui_subblock)
+		if(irradiating) //stop spamming this thing
+			return
 
 		irradiating = src.radiation_duration
 		var/lock_state = src.connected.locked
@@ -810,6 +814,8 @@
 		var/block = src.connected.occupant.dna.GetSESubBlock(src.selected_se_block,src.selected_se_subblock)
 		//var/original_block=block
 		//testing("Irradiating SE block [src.selected_se_block]:[src.selected_se_subblock] ([block])...")
+		if(irradiating) //stop spamming this thing
+			return
 
 		irradiating = src.radiation_duration
 		var/lock_state = src.connected.locked
