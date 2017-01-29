@@ -433,7 +433,7 @@ Made a proc so this is not repeated 14 (or more) times.*/
 			if(wizard_mind.current)
 				if(wizard_mind.current.client)
 					for(var/image/I in wizard_mind.current.client.images)
-						if(I.icon_state == "wizard")
+						if(I.icon_state == "wizard" || I.icon_state == "apprentice")
 							wizard_mind.current.client.images -= I
 
 		for(var/datum/mind/apprentice_mind in apprentices)
