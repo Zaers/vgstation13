@@ -3,7 +3,7 @@
 <script type=\"text/javascript\" src=\"libraries.min.js\"></script>\
 <link rel=\"stylesheet\" type=\"text/css\" href=\"html_interface_icons.css\" />\
 <link rel=\"stylesheet\" type=\"text/css\" href=\"map_shared.css\" />\
-<script type=\"text/javascript\" src=\"map_shared.js\">"
+<script type=\"text/javascript\" src=\"map_shared.js\"></script>"
 
 #define MAPCONTENT \
 "<div id='switches'>\
@@ -12,7 +12,8 @@
 <a href='javascript:changezlevels();'>Change Z-Level</a> </div>\
 <div id=\"uiMapContainer\">\
 <div id=\"uiMap\" unselectable=\"on\"></div></div>\
-<div id=\"textbased\"></div>"
+<div id=\"textbased\"></div></script>"
+
 // Base datum for html_interface interactive maps.
 var/const/MAX_ICON_DIMENSION = 2000
 var/const/ICON_SIZE = 4
@@ -88,13 +89,10 @@ var/const/ALLOW_CENTCOMM = FALSE
 /datum/interactive_map/proc/sendResources(client/C)
 	C << browse_rsc('map_shared.js')
 	C << browse_rsc('map_shared.css')
-	for (var/z = 1 to world.maxz)
-		if(z == CENTCOMM_Z)
-			continue
-		C << browse_rsc(file("[getMinimapFile(z)].png"), "[map.nameShort][z].png")
+
 
 /proc/getMinimapFile(z)
-	return "data/minimaps/map_[map.nameLong][z]"
+	return "data/minimaps/map_[map.nameShort][z]"
 
 // Activate this to debug tile mismatches in the minimap.
 // This will store the full information on each tile and compare it the next time you run the minimap.
@@ -103,6 +101,8 @@ var/const/ALLOW_CENTCOMM = FALSE
 // #define MINIMAP_DEBUG
 
 /proc/generateMiniMap(z, x1 = 1, y1 = 1, x2 = world.maxx, y2 = world.maxy)
+	set name = "Generate minimaps"
+	set category = "Mapping"
 	var/result_path = "[getMinimapFile(z)].png"
 	var/hash_path = "[getMinimapFile(z)].md5"
 	var/hash = ""
