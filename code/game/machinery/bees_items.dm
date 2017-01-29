@@ -67,11 +67,14 @@
 	var/mob/living/carbon/M
 	if(iscarbon(usr))
 		M = usr
-
+	var/old_caught_bees = caught_bees
+	if(!caught_bees)
+		to_chat(usr, "<span class='warning'>This net has no bees in it!</span>")
+		return
 	while(caught_bees > 0)
 		//release a few super massive swarms
 		while(caught_bees > 5)
-			var/mob/living/simple_animal/bee/B = new(src.loc)
+			var/mob/living/simple_animal/bee/B = new(get_turf(src))
 			B.feral = 5
 			B.target = M
 			B.strength = 6
@@ -79,12 +82,13 @@
 			caught_bees -= 6
 
 		//what's left over
-		var/mob/living/simple_animal/bee/B = new(src.loc)
+		var/mob/living/simple_animal/bee/B = new(get_turf(src))
 		B.strength = caught_bees
 		B.icon_state = "bees[B.strength]"
 		B.feral = 5
 		B.target = M
 
+		to_chat(usr, "<span class='warning'>You released [old_caught_bees] bees!</span>")
 		caught_bees = 0
 
 /obj/item/apiary
