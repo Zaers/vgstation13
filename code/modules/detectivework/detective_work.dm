@@ -85,7 +85,6 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 
 /obj/machinery/computer/forensic_scanning/New()
 	..()
-	new /obj/item/weapon/book/manual/detective(get_turf(src))
 	return
 
 
@@ -93,6 +92,10 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 	src.add_hiddenprint(user)
 	return attack_hand(user)
 
+
+/obj/machinery/computer/forensic_scanning/initialize()
+	new /obj/item/weapon/book/manual/detective(get_turf(src))
+	..()
 
 /obj/machinery/computer/forensic_scanning/attack_hand(mob/user)
 	if(..())
