@@ -38,6 +38,13 @@
 	air_contents = null
 	..()
 
+
+/obj/machinery/portable_atmospherics/forceMove(atom/destination)
+	..()
+	if(connected_port && loc != connected_port.loc)
+		disconnect()
+		update_icon()
+
 /obj/machinery/portable_atmospherics/update_icon()
 	return null
 

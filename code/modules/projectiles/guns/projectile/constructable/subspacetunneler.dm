@@ -27,7 +27,7 @@
 		)
 	var/list/prohibited = list( //Items that are prohibited because, frankly, it would cause more unfun for everyone else than fun for the user if they could be retrieved.
 		/obj/machinery/door,									//airlocks
-		/obj/machinery/power/apc,								//APCs
+		/obj/machinery/power,									//Power machinery in general
 		/obj/machinery/atmospherics,							//pipes, vents, pumps, the cryo tubes, the gas miners, etc.
 		/obj/machinery/alarm,									//air alarms
 		/obj/machinery/firealarm,								//fire alarms
@@ -56,13 +56,17 @@
 		/obj/machinery/sleeper,									//sleepers
 		/obj/machinery/body_scanconsole,						//body scanner consoles
 		/obj/machinery/bodyscanner,								//body scanners
+		/obj/structure/m_tray,									//Morgue trays
+		/obj/structure/morgue,									//Morgues
 		/obj/machinery/hologram/holopad,						//AI holopads
 		/obj/machinery/media/receiver/boombox/wallmount,		//sound systems
 		/obj/machinery/keycard_auth,							//keycard authentication devices
-		/obj/machinery/power/battery/smes,						//SMES
 		/obj/structure/particle_accelerator,					//the particle accelerator
 		/obj/machinery/am_shielding,							//the AME
 		/obj/machinery/gateway,									//the gateway
+		/obj/machinery/mommi_spawner,							//MoMMI fabricators
+		/obj/mecha,												//Giant robots
+		/obj/spacepod,											//Space pods
 		)
 
 /obj/item/weapon/subspacetunneler/Destroy()
@@ -74,14 +78,9 @@
 		qdel(loaded_matter_bin)
 		loaded_matter_bin = null
 	if(stored_items.len)
-		spawn(0)
-			src.visible_message("<span class='warning'>\The [src]'s stored [stored_items.len > 1 ? "items are" : "item is"] forcibly ejected as \the [src] is destroyed!</span>")
-			for(var/I in stored_items)
-				var/offset_x = rand(-3,3)
-				var/offset_y = rand(-3,3)
-				var/turf/T = locate(currturf.x+offset_x, currturf.y+offset_y, currturf.z)
-				send(T)
-				sleep(1)
+		src.visible_message("<span class='warning'>\The [src]'s stored [stored_items.len > 1 ? "items are" : "item is"] forcibly ejected as \the [src] is destroyed!</span>")
+		for(var/I in stored_items)
+			send(currturf)
 	..()
 
 /obj/item/weapon/subspacetunneler/attack_self(mob/user as mob)
@@ -181,11 +180,18 @@
 	if(target == user)
 		return
 
+	if(target.z != user.z || get_dist(user, target) > 8)
+		return
+
 	var/datum/zLevel/L = get_z_level(target)
 	if (L.teleJammed)
 		return
 
+
 	if(istype(target, /turf) && !istype(target, /turf/simulated/wall))
+		var/area/A = target.loc
+		if(A && A.jammed) //no bluespace for you
+			return
 		send(target,user)
 		return
 
@@ -195,6 +201,9 @@
 		return 0
 	else
 		if(istype(target, /obj))
+			var/area/A = target.loc
+			if(A && A.jammed) //no bluespace for you
+				return
 			receive(target,user)
 			return
 
@@ -202,7 +211,7 @@
 	if(!T)
 		T = get_random_nearby_turf()
 	if(!T)
-		return
+		return 0
 	if(stored_items.len)
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(3, 1, src)
@@ -222,6 +231,7 @@
 			user.visible_message("<span class='warning'>[user] ejects \the [O] from \his [src.name] through a subspace rift!</span>","You eject \the [O] from your [src.name] through a subspace rift.")
 		playsound(O, 'sound/effects/phasein.ogg', 50, 1)
 		anim(location = T,a_icon = 'icons/obj/weaponsmithing.dmi',flick_anim = "subspace_rift",name = "subspace rift")
+		return 1
 
 /obj/item/weapon/subspacetunneler/proc/get_random_nearby_turf()
 	var/turf/currturf = get_turf(src)
