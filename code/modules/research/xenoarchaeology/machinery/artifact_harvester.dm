@@ -56,6 +56,17 @@
 				dat += "Please wait. Energy dump in progress ([(inserted_battery.stored_charge/inserted_battery.capacity)*100]%).<br>"
 			dat += "<A href='?src=\ref[src];stopharvest=1'>Halt early</A><BR>"
 		else
+			if(artifact_field)
+				dat += "<A href='?src=\ref[src];alockoff=1'>Deactivate containment field</a><BR>"
+				dat += "<b>Artifact energy signature ID:</b>[cur_artifact.artifact_id == "" ? "???" : "[cur_artifact.artifact_id]"]<BR>"
+				dat += "<A href='?src=\ref[src];isolateeffect=1'>Isolate exotic particles</a><BR>"
+				if(isolated_primary)
+					dat += "<b>Isolated energy signature ID:</b>[isolated_primary.artifact_id == "" ? "???" : "[isolated_primary.artifact_id]"]<BR>"
+				if(isolated_secondary)
+					dat += "<b>Isolated energy signature ID:</b>[isolated_secondary.artifact_id == "" ? "???" : "[isolated_secondary.artifact_id]"]<BR>"
+			else
+				dat += "<A href='?src=\ref[src];alockon=1'>Activate containment field</a><BR>"
+
 			if(inserted_battery)
 				dat += "<b>[inserted_battery.name]</b> inserted, charge level: [inserted_battery.stored_charge]/[inserted_battery.capacity] ([(inserted_battery.stored_charge/inserted_battery.capacity)*100]%)<BR>"
 				dat += "<b>Battery energy signature ID:</b>[inserted_battery.battery_effect.artifact_id == "" ? "???" : "[inserted_battery.battery_effect.artifact_id]"]<BR>"
@@ -226,6 +237,62 @@
 			harvesting = 0
 			src.visible_message("<b>[name]</b> states, \"Activity interrupted.\"")
 			icon_state = "incubator"
+			src.investigation_log(I_ARTIFACT, "|| anomaly battery [inserted_battery.battery_effect.artifact_id] harvested by [key_name(harvester)]")
+
+	if (href_list["alockon"])
+		if(!artifact_field)
+			cur_artifact = null
+			var/articount = 0
+			var/obj/machinery/artifact/analysed
+			for(var/obj/machinery/artifact/A in get_turf(owned_scanner))
+				analysed = A
+				articount++
+
+
+			if(!analysed)
+				var/message = "<b>[src]</b> states, \"Cannot initialize field, no artifact detected.\""
+				src.visible_message(message)
+				return
+			else if(articount == 1)
+				cur_artifact = analysed
+
+				var/turf/T = get_turf(owned_scanner)
+				artifact_field = new(T)
+				src.visible_message("<span class='notice'>[bicon(owned_scanner)] [owned_scanner] activates with a low hum.</span>")
+				cur_artifact.anchored = 1
+				cur_artifact.contained = 1
+				cur_artifact.being_used = 1
+
+	if (href_list["alockoff"])
+		if (artifact_field)
+			src.visible_message("<span class='notice'>[bicon(owned_scanner)] [owned_scanner] deactivates with a gentle shudder.</span>")
+			qdel(artifact_field)
+			artifact_field = null
+			if(cur_artifact)
+				cur_artifact.anchored = 0
+				cur_artifact.being_used = 0
+				cur_artifact.contained = 0
+				cur_artifact = null
+				isolated_primary = null
+				isolated_secondary = null
+
+	if (href_list["isolateeffect"])
+		if (artifact_field && cur_artifact)
+			isolated_primary = null
+			isolated_secondary = null
+			if (cur_artifact.my_effect.activated || cur_artifact.my_effect.isolated)
+				isolated_primary = cur_artifact.my_effect
+				var/message = "<b>[src]</b> states, \"Exotic particle signature ID: [cur_artifact.my_effect.artifact_id] successfully isolated.\""
+				src.visible_message(message)
+			if (cur_artifact.secondary_effect)
+				if (cur_artifact.secondary_effect.activated || cur_artifact.secondary_effect.isolated)
+					isolated_secondary = cur_artifact.secondary_effect
+					var/message = "<b>[src]</b> states, \"Exotic particle signature ID: [cur_artifact.secondary_effect.artifact_id] successfully isolated.\""
+					src.visible_message(message)
+			if (!isolated_primary && !isolated_secondary)
+				var/message = "<b>[src]</b> states, \"Cannot isolate exotic particles, none detected.\""
+				src.visible_message(message)
+				return
 
 	if (href_list["alockon"])
 		if(!artifact_field)
