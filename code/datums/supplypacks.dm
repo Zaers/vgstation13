@@ -979,7 +979,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/maracas,
 					/obj/item/weapon/storage/box/balloons,
 					/obj/item/weapon/storage/box/balloons,
-					/obj/item/weapon/storage/box/balloons)
+					/obj/item/weapon/storage/box/balloons,
+					/obj/item/weapon/storage/box/balloons/long,
+					/obj/item/weapon/storage/box/balloons/long,
+					/obj/item/weapon/storage/box/balloons/long)
 	cost = 20
 	containertype = /obj/structure/closet/crate
 	containername = "party equipment crate"
@@ -1505,7 +1508,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "motorized wheelchair crate"
 	access = access_cmo
 	group = "Medical"
-	
+
 /datum/supply_packs/skele_stand
 	name = "Hanging skeleton model"
 	cost = 30
