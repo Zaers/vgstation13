@@ -258,6 +258,7 @@
 		user.put_in_hands(F)
 		src.add_fingerprint(user)
 		F.add_fingerprint(user)
+		F.update_materials()
 		use(1)
 		if (src && usr.machine==src)
 			spawn(0) src.interact(usr)
