@@ -16,7 +16,8 @@
 	var/allow_anchored = 0
 
 	var/static/list/prohibited = list( //Items that are prohibited because, frankly, it would cause more unfun for everyone else than fun for the user if they could be retrieved.
-		/obj/machinery/power/apc,								//APCs
+		/obj/machinery/door,									//airlocks
+		/obj/machinery/power,									//Power machinery in general
 		/obj/machinery/atmospherics,							//pipes, vents, pumps, the cryo tubes, the gas miners, etc.
 		/obj/machinery/alarm,									//air alarms
 		/obj/machinery/firealarm,								//fire alarms
@@ -29,9 +30,9 @@
 		/obj/machinery/requests_console,						//requests consoles
 		/obj/machinery/door_control,							//door control buttons
 		/obj/structure/closet/fireaxecabinet,					//fire axe cabinets
-		/obj/machinery/light_switch,							//light switches                  //list taken from subspacetunneler.dm
+		/obj/machinery/light_switch,							//light switches
 		/obj/structure/sign,									//area signs
-		/obj/structure/closet/walllocker,						//defib lockers, wall-mounted O2 lockers, etc.
+		/obj/structure/closet/walllocker,						//defib lockers, wall-mounted O2 lockers, etc.  //Taken from the subspace tunneler
 		/obj/machinery/recharger/defibcharger/wallcharger,		//wall-mounted defib chargers
 		/obj/structure/noticeboard,								//notice boards
 		/obj/machinery/space_heater/campfire/stove/fireplace,	//fireplaces
@@ -45,10 +46,18 @@
 		/obj/machinery/sleeper,									//sleepers
 		/obj/machinery/body_scanconsole,						//body scanner consoles
 		/obj/machinery/bodyscanner,								//body scanners
+		/obj/structure/m_tray,									//Morgue trays
+		/obj/structure/morgue,									//Morgues
+		/obj/machinery/hologram/holopad,						//AI holopads
 		/obj/machinery/media/receiver/boombox/wallmount,		//sound systems
 		/obj/machinery/keycard_auth,							//keycard authentication devices
+		/obj/structure/particle_accelerator,					//the particle accelerator
+		/obj/machinery/am_shielding,							//the AME
+		/obj/machinery/gateway,									//the gateway
+		/obj/machinery/mommi_spawner,							//MoMMI fabricators
+		/obj/mecha,												//Giant robots
+		/obj/spacepod,											//Space pods
 		)
-
 
 /spell/targeted/bound_object/is_valid_target(var/obj/target)
 	if(!istype(target))
