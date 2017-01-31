@@ -146,6 +146,11 @@
 			to_chat(src, "<span class='notice'><B>Remove their [H.get_body_part_coverage(MOUTH)]!</B></span>")
 			return 0
 
+	if(target == src)
+		to_chat(src, "<span class='warning'>You cannot perform CPR on yourself!</span>")
+		return 0
+
+
 	if(!target.cpr_time)
 		return 0
 
