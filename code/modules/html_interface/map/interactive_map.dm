@@ -71,6 +71,8 @@ var/const/ALLOW_CENTCOMM = FALSE
 /datum/interactive_map/proc/queueUpdate(z)
 
 /proc/generateMiniMaps()
+	set name = "Generate minimaps"
+	set category = "Mapping"
 	//spawn // NO
 	for (var/z = 1 to world.maxz)
 		if(z == CENTCOMM_Z && !ALLOW_CENTCOMM)
@@ -101,8 +103,6 @@ var/const/ALLOW_CENTCOMM = FALSE
 // #define MINIMAP_DEBUG
 
 /proc/generateMiniMap(z, x1 = 1, y1 = 1, x2 = world.maxx, y2 = world.maxy)
-	set name = "Generate minimaps"
-	set category = "Mapping"
 	var/result_path = "[getMinimapFile(z)].png"
 	var/hash_path = "[getMinimapFile(z)].md5"
 	var/hash = ""
