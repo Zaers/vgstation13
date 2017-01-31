@@ -80,6 +80,7 @@
 
 	// Make sure the plant is not starving or thirsty. Adequate water and nutrients will
 	// cause a plant to become healthier. Lack of sustenance will stunt the plant's growth.
+
 	if(prob(35))
 		if(nutrilevel > 2)
 			health += healthmod
@@ -97,10 +98,11 @@
 		if(draw_warnings)
 			update_icon_after_process = 1
 
+
 	// Check that pressure, heat and light are all within bounds.
 	// First, handle an open system or an unconnected closed system.
 
-	var/turf/T = loc
+	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/environment
 
 	// If we're closed, take from our internal sources.

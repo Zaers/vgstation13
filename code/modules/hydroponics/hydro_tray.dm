@@ -190,6 +190,9 @@
 
 		if(!seed)
 
+			if(!anchored) //It says the machine must be fixed to work, so I'll fix it
+				to_chat(user, "<span class='alert'>The tray must be anchored for you to plant seeds in it.</span>")
+				return
 			var/obj/item/seeds/S = O
 			user.drop_item(S)
 
@@ -347,9 +350,17 @@
 	else if(istype(O, /obj/item/weapon/tank))
 		return // Maybe someday make it draw atmos from it so you don't need a whoopin canister, but for now, nothing.
 
-	else if(iswrench(O) && istype(src, /obj/machinery/portable_atmospherics/hydroponics/soil)) //Soil isn't a portable atmospherics machine by any means
-		return //Don't call parent. I mean, soil shouldn't be a child of portable_atmospherics at all, but that's not very feasible.
-
+	else if(iswrench(O))
+		if(istype(src, /obj/machinery/portable_atmospherics/hydroponics/soil)) //Soil isn't a portable atmospherics machine by any means
+			return
+		if(wrenchable()) //Check it if someone did something dumb and made it not wrenchable
+			if(seed)
+				to_chat(user, "<span class='alert'>The [src] cannot be unwrenched with seeds in it.</span>")
+				return
+			if(wrenchAnchor(user) == 1)
+				state = anchored
+				return
+		return
 	else if(istype(O, /obj/item/apiary))
 
 		if(seed)
