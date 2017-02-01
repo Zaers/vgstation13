@@ -483,6 +483,34 @@ Made a proc so this is not repeated 14 (or more) times.*/
 							I.plane = WIZ_ANTAG_HUD_PLANE
 							apprentice_mind.current.client.images += I
 
+
+/datum/game_mode/proc/update_wizard_icons_for_client(var/client/C)
+	if(!C)
+		return
+	spawn(0)
+		for(var/image/I in C.images)
+			if(I.icon_state == "wizard" || I.icon_state == "apprentice")
+				C.images -= I
+
+
+		for(var/datum/mind/apprentice in apprentices)
+			if(apprentice.current)
+				var/imageloc = apprentice.current
+				if(istype(apprentice.current.loc,/obj/mecha))
+					imageloc = apprentice.current.loc
+				var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "apprentice")
+				I.plane = WIZ_ANTAG_HUD_PLANE
+				C.images += I
+		for(var/datum/mind/wizard_mind_1 in wizards)
+			if(wizard_mind_1.current)
+				var/imageloc = wizard_mind_1.current
+				if(istype(wizard_mind_1.current.loc,/obj/mecha))
+					imageloc = wizard_mind_1.current.loc
+				var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "wizard")
+				I.plane = WIZ_ANTAG_HUD_PLANE
+				C.images += I
+
+
 /datum/game_mode/proc/update_wizard_icons_added(datum/mind/wizard_mind)
 	spawn(0)
 		for(var/datum/mind/wizard_mind_1 in wizards)

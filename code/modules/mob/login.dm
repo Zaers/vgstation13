@@ -100,5 +100,5 @@
 	if(client)
 		if(mind && ticker.mode)
 			if(mind in ticker.mode.wizards || mind in ticker.mode.apprentices)
-			 ticker.mode.update_all_wizard_icons() //Make it so you update the icons if you relog
+			 ticker.mode.update_wizard_icons_for_client(client) //Make it so you update the icons if you relog
 		client.CAN_MOVE_DIAGONALLY = 0
