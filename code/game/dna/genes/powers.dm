@@ -8,8 +8,8 @@
 	deactivation_messages=list("The need to breathe returns.")
 	mutation=M_NO_BREATH
 
-	New()
-		block=NOBREATHBLOCK
+/datum/dna/gene/basic/nobreath/New()
+	block=NOBREATHBLOCK
 
 /datum/dna/gene/basic/grant_spell/remoteview
 	name="Remote Viewing"
@@ -23,8 +23,8 @@
 
 	spelltype = /spell/targeted/remoteobserve
 
-	New()
-		block=REMOTEVIEWBLOCK
+/datum/dna/gene/basic/grant_spell/remoteview/New()
+	block=REMOTEVIEWBLOCK
 
 /spell/targeted/remoteobserve
 	name = "Remote View"
@@ -78,8 +78,8 @@
 	deactivation_messages=list("You stop feeling better.")
 	mutation=M_REGEN
 
-	New()
-		block=REGENERATEBLOCK
+/datum/dna/gene/basic/regenerate/New()
+	block=REGENERATEBLOCK
 
 /datum/dna/gene/basic/increaserun
 	name="Super Speed"
@@ -87,8 +87,8 @@
 	deactivation_messages=list("Your leg muscles no longer pulsate.")
 	mutation=M_RUN
 
-	New()
-		block=INCREASERUNBLOCK
+/datum/dna/gene/basic/increaserun/New()
+	block=INCREASERUNBLOCK
 
 /datum/dna/gene/basic/grant_spell/remotetalk
 	name="Telepathy"
@@ -102,9 +102,9 @@
 
 	spelltype = /spell/targeted/remotesay
 
-	New()
-		..()
-		block=REMOTETALKBLOCK
+/datum/dna/gene/basic/grant_spell/remotetalk/New()
+	..()
+	block=REMOTETALKBLOCK
 
 /spell/targeted/remotesay
 	name = "Project Mind"
@@ -162,12 +162,12 @@
 
 	mutation=M_MORPH
 
-	New()
-		block=MORPHBLOCK
+/datum/dna/gene/basic/morph/New()
+	block=MORPHBLOCK
 
-	activate(var/mob/M)
-		..(M)
-		M.verbs += /mob/living/carbon/human/proc/morph
+/datum/dna/gene/basic/morph/activate(var/mob/M)
+	..(M)
+	M.verbs += /mob/living/carbon/human/proc/morph
 
 /datum/dna/gene/basic/heat_resist
 	name="Heat Resistance"
@@ -179,21 +179,21 @@
 
 	mutation=M_RESIST_HEAT
 
-	New()
-		block=COLDBLOCK
+/datum/dna/gene/basic/heat_resist/New()
+	block=COLDBLOCK
 
-	can_activate(var/mob/M,var/flags)
-		if(flags & MUTCHK_FORCED)
-			return !(/datum/dna/gene/basic/cold_resist in M.active_genes)
-		// Probability check
-		var/_prob = 15
-		if(M_RESIST_COLD in M.mutations)
-			_prob=5
-		if(probinj(_prob,(flags&MUTCHK_FORCED)))
-			return 1
+/datum/dna/gene/basic/heat_resist/can_activate(var/mob/M,var/flags)
+	if(flags & MUTCHK_FORCED)
+		return !(/datum/dna/gene/basic/cold_resist in M.active_genes)
+	// Probability check
+	var/_prob = 15
+	if(M_RESIST_COLD in M.mutations)
+		_prob=5
+	if(probinj(_prob,(flags&MUTCHK_FORCED)))
+		return 1
 
-	OnDrawUnderlays(var/mob/M,var/g,var/fat)
-		return "cold[fat]_s"
+/datum/dna/gene/basic/heat_resist/OnDrawUnderlays(var/mob/M,var/g,var/fat)
+	return "cold[fat]_s"
 
 /datum/dna/gene/basic/cold_resist
 	name="Cold Resistance"
@@ -205,21 +205,21 @@
 
 	mutation=M_RESIST_COLD
 
-	New()
-		block=FIREBLOCK
+/datum/dna/gene/basic/cold_resist/New()
+	block=FIREBLOCK
 
-	can_activate(var/mob/M,var/flags)
-		if(flags & MUTCHK_FORCED)
-			return !(/datum/dna/gene/basic/heat_resist in M.active_genes)
-		// Probability check
-		var/_prob=30
-		if(M_RESIST_HEAT in M.mutations)
-			_prob=5
-		if(probinj(_prob,(flags&MUTCHK_FORCED)))
-			return 1
+/datum/dna/gene/basic/cold_resist/can_activate(var/mob/M,var/flags)
+	if(flags & MUTCHK_FORCED)
+		return !(/datum/dna/gene/basic/heat_resist in M.active_genes)
+	// Probability check
+	var/_prob=30
+	if(M_RESIST_HEAT in M.mutations)
+		_prob=5
+	if(probinj(_prob,(flags&MUTCHK_FORCED)))
+		return 1
 
-	OnDrawUnderlays(var/mob/M,var/g,var/fat)
-		return "fire[fat]_s"
+/datum/dna/gene/basic/cold_resist/OnDrawUnderlays(var/mob/M,var/g,var/fat)
+	return "fire[fat]_s"
 
 /datum/dna/gene/basic/noprints
 	name="No Prints"
@@ -227,8 +227,8 @@
 	deactivation_messages=list("Your fingers stop feeling numb.")
 	mutation=M_FINGERPRINTS
 
-	New()
-		block=NOPRINTSBLOCK
+/datum/dna/gene/basic/noprints/New()
+	block=NOPRINTSBLOCK
 
 /datum/dna/gene/basic/noshock
 	name="Shock Immunity"
@@ -236,8 +236,8 @@
 	deactivation_messages=list("Your skin no longer feels electric.")
 	mutation=M_NO_SHOCK
 
-	New()
-		block=SHOCKIMMUNITYBLOCK
+/datum/dna/gene/basic/noshock/New()
+	block=SHOCKIMMUNITYBLOCK
 
 /datum/dna/gene/basic/midget
 	name="Midget"
@@ -245,16 +245,16 @@
 	deactivation_messages=list("You stop feeling small.")
 	mutation=M_DWARF
 
-	New()
-		block=SMALLSIZEBLOCK
+/datum/dna/gene/basic/midget/New()
+	block=SMALLSIZEBLOCK
 
-	activate(var/mob/M, var/connected, var/flags)
-		..(M,connected,flags)
-		M.pass_flags |= PASSTABLE
+/datum/dna/gene/basic/midget/activate(var/mob/M, var/connected, var/flags)
+	..(M,connected,flags)
+	M.pass_flags |= PASSTABLE
 
-	deactivate(var/mob/M, var/connected, var/flags)
-		if(..(M,connected,flags))
-			M.pass_flags &= ~PASSTABLE
+/datum/dna/gene/basic/midget/deactivate(var/mob/M, var/connected, var/flags)
+	if(..(M,connected,flags))
+		M.pass_flags &= ~PASSTABLE
 
 /* OLD HULK BEHAVIOR
 /datum/dna/gene/basic/hulk
@@ -301,8 +301,8 @@
 
 	mutation=M_XRAY
 
-	New()
-		block=XRAYBLOCK
+/datum/dna/gene/basic/xray/New()
+	block=XRAYBLOCK
 
 /datum/dna/gene/basic/tk
 	name="Telekenesis"
@@ -315,8 +315,8 @@
 	mutation=M_TK
 	activation_prob=15
 
-	New()
-		block=TELEBLOCK
+/datum/dna/gene/basic/tk/New()
+	block=TELEBLOCK
 
-	OnDrawUnderlays(var/mob/M,var/g,var/fat)
-		return "telekinesishead[fat]_s"
+/datum/dna/gene/basic/tk/OnDrawUnderlays(var/mob/M,var/g,var/fat)
+	return "telekinesishead[fat]_s"
