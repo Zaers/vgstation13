@@ -43,6 +43,7 @@ proc/cardinalrange(var/center)
 		controllerscan()
 		return
 	link_control(AMC)
+	update_icon()
 	machines -= src
 	power_machines += src
 
