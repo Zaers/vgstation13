@@ -8,8 +8,8 @@
 
 	mutation=M_SOBER
 
-	New()
-		block=SOBERBLOCK
+/datum/dna/gene/basic/sober/New()
+    block=SOBERBLOCK
 
 //WAS: /datum/bioEffect/psychic_resist
 /datum/dna/gene/basic/psychic_resist
@@ -20,25 +20,24 @@
 
 	mutation=M_PSY_RESIST
 
-	New()
-		block=PSYRESISTBLOCK
+/datum/dna/gene/basic/psychic_resist/New()
+	block=PSYRESISTBLOCK
 
 /////////////////////////
 // Stealth Enhancers
 /////////////////////////
 
-/datum/dna/gene/basic/stealth
-	can_activate(var/mob/M, var/flags)
-		// Can only activate one of these at a time.
-		if(is_type_in_list(/datum/dna/gene/basic/stealth,M.active_genes))
-			testing("Cannot activate [type]: /datum/dna/gene/basic/stealth in M.active_genes.")
-			return 0
-		return ..(M,flags)
+/datum/dna/gene/basic/stealth/can_activate(var/mob/M, var/flags)
+    // Can only activate one of these at a time.
+	if(is_type_in_list(/datum/dna/gene/basic/stealth,M.active_genes))
+		testing("Cannot activate [type]: /datum/dna/gene/basic/stealth in M.active_genes.")
+		return 0
+	return ..(M,flags)
 
-	deactivate(var/mob/M, var/connected, var/flags)
-		if(..(M,connected,flags))
-			M.alphas -= "chameleon_stealth"
-			M.handle_alpha()
+/datum/dna/gene/basic/stealth/deactivate(var/mob/M, var/connected, var/flags)
+	if(..(M,connected,flags))
+		M.alphas -= "chameleon_stealth"
+		M.handle_alpha()
 
 // WAS: /datum/bioEffect/darkcloak
 /*/datum/dna/gene/basic/stealth/darkcloak
@@ -66,14 +65,14 @@
 	activation_messages = list("You feel one with your surroundings.")
 	deactivation_messages = list("You feel oddly exposed.")
 
-	New()
-		block=CHAMELEONBLOCK
+/datum/dna/gene/basic/stealth/chameleon/New()
+	block=CHAMELEONBLOCK
 
-	OnMobLife(var/mob/M)
-		if((world.time - M.last_movement) >= 30 && !M.isUnconscious() && M.canmove && !M.restrained())
-			M.alphas["chameleon_stealth"] = max(M.alphas["chameleon_stealth"] - 25, 0)
-		else
-			M.alphas["chameleon_stealth"] = round(255 * 0.80)
+/datum/dna/gene/basic/stealth/chameleon/OnMobLife(var/mob/M)
+	if((world.time - M.last_movement) >= 30 && !M.isUnconscious() && M.canmove && !M.restrained())
+		M.alphas["chameleon_stealth"] = max(M.alphas["chameleon_stealth"] - 25, 0)
+	else
+		M.alphas["chameleon_stealth"] = round(255 * 0.80)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -81,42 +80,42 @@
 	var/spell/spelltype
 	var/list/granted_spells
 
-	activate(var/mob/M, var/connected, var/flags)
-		..(M,connected,flags)
-		var/spell/granted = new spelltype
-		M.add_spell(granted, "genetic_spell_ready", /obj/screen/movable/spell_master/genetic)
-		if(!granted_spells)
-			granted_spells = list()
-		granted_spells += granted
-		//testing("[M] added [granted.name] from [name]")
-		return 1
+/datum/dna/gene/basic/grant_spell/activate(var/mob/M, var/connected, var/flags)
+	..(M,connected,flags)
+	var/spell/granted = new spelltype
+	M.add_spell(granted, "genetic_spell_ready", /obj/screen/movable/spell_master/genetic)
+	if(!granted_spells)
+		granted_spells = list()
+	granted_spells += granted
+	//testing("[M] added [granted.name] from [name]")
+	return 1
 
-	deactivate(var/mob/M, var/connected, var/flags)
-		if(..(M,connected,flags))
-			for(var/spell/S in M.spell_list)
-				if(S in granted_spells)
-					M.remove_spell(S)
-					granted_spells -= S
-					//testing("[M] removed [S.name] from [name]")
-					qdel(S)
-			return 1
-		return 0
+/datum/dna/gene/basic/grant_spell/deactivate(var/mob/M, var/connected, var/flags)
+	if(..(M,connected,flags))
+		for(var/spell/S in M.spell_list)
+			if(S in granted_spells)
+				M.remove_spell(S)
+				granted_spells -= S
+				//testing("[M] removed [S.name] from [name]")
+				qdel(S)
+		return 1
+	return 0
 
 /datum/dna/gene/basic/grant_verb
 	var/verbtype
 
-	activate(var/mob/M, var/connected, var/flags)
-		..(M,connected,flags)
-		M.verbs += verbtype
-		//testing("[M] added [verbtype] from [name]")
-		return 1
+/datum/dna/gene/basic/grant_verb/activate(var/mob/M, var/connected, var/flags)
+	..(M,connected,flags)
+	M.verbs += verbtype
+	//testing("[M] added [verbtype] from [name]")
+	return 1
 
-	deactivate(var/mob/M, var/connected, var/flags)
-		if(..(M,connected,flags))
-			M.verbs -= verbtype
-			//testing("[M] removed [verbtype] from [name]")
-			return 1
-		return 0
+/datum/dna/gene/basic/grant_verb/deactivate(var/mob/M, var/connected, var/flags)
+	if(..(M,connected,flags))
+		M.verbs -= verbtype
+		//testing("[M] removed [verbtype] from [name]")
+		return 1
+	return 0
 
 // WAS: /datum/bioEffect/cryokinesis
 /datum/dna/gene/basic/grant_spell/cryo
@@ -130,9 +129,9 @@
 
 	spelltype = /spell/targeted/cryokinesis
 
-	New()
-		..()
-		block = CRYOBLOCK
+/datum/dna/gene/basic/grant_spell/cryo/New()
+	..()
+	block = CRYOBLOCK
 
 /spell/targeted/cryokinesis
 	name = "Cryokinesis"
@@ -195,9 +194,9 @@
 
 	spelltype=	/spell/targeted/eat
 
-	New()
-		..()
-		block = EATBLOCK
+/datum/dna/gene/basic/grant_spell/mattereater/New()
+	..()
+	block = EATBLOCK
 
 /spell/targeted/eat
 	name = "Eat"
@@ -414,9 +413,9 @@
 
 	spelltype =/spell/targeted/leap
 
-	New()
-		..()
-		block = JUMPBLOCK
+/datum/dna/gene/basic/grant_spell/jumpy/New()
+	..()
+	block = JUMPBLOCK
 
 /spell/targeted/leap
 	name = "Jump"
@@ -504,7 +503,7 @@
 			container.pixel_x = 0
 			container.pixel_y = 0
 
-	return 1 //Stop the automatic take cahrge, we already handled it
+	return 1 //Stop the automatic take charge, we already handled it
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -522,9 +521,9 @@
 	drug_activation_messages=list()
 	drug_deactivation_messages=list()
 
-	New()
-		..()
-		block = POLYMORPHBLOCK
+/datum/dna/gene/basic/grant_spell/polymorph/New()
+	..()
+	block = POLYMORPHBLOCK
 
 /spell/targeted/polymorph
 	name = "Polymorph"
@@ -570,9 +569,9 @@
 	drug_activation_messages=list("You feel more social!")
 	drug_deactivation_messages=list("You feel less social.")
 
-	New()
-		..()
-		block = EMPATHBLOCK
+/datum/dna/gene/basic/grant_spell/empath/New()
+	..()
+	block = EMPATHBLOCK
 
 /spell/targeted/empath
 	name = "Read Mind"
@@ -692,9 +691,9 @@
 
 	mutation = M_SUPER_FART
 
-	New()
-		..()
-		block = SUPERFARTBLOCK
+/datum/dna/gene/basic/superfart/New()
+	..()
+	block = SUPERFARTBLOCK
 
 // WAS: /datum/bioEffect/strong
 /datum/dna/gene/basic/strong
@@ -706,6 +705,6 @@
 
 	mutation = M_STRONG
 
-	New()
-		..()
-		block=STRONGBLOCK
+/datum/dna/gene/basic/strong/New()
+	..()
+	block=STRONGBLOCK

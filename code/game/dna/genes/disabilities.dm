@@ -64,8 +64,8 @@
 	deactivation_message = "Your mind no longer speaks to you."
 	mutation=M_HALLUCINATE
 
-	New()
-		block=HALLUCINATIONBLOCK
+/datum/dna/gene/disability/hallucinate/New()
+	block=HALLUCINATIONBLOCK
 
 /datum/dna/gene/disability/epilepsy
 	name="Epilepsy"
@@ -73,8 +73,8 @@
 	deactivation_message = "Your headache disappears."
 	disability=EPILEPSY
 
-	New()
-		block=HEADACHEBLOCK
+/datum/dna/gene/disability/epilepsy/New()
+	block=HEADACHEBLOCK
 
 /datum/dna/gene/disability/cough
 	name="Coughing"
@@ -82,8 +82,8 @@
 	deactivation_message = "The need to cough disappears."
 	disability=COUGHING
 
-	New()
-		block=COUGHBLOCK
+/datum/dna/gene/disability/cough/New()
+	block=COUGHBLOCK
 
 /datum/dna/gene/disability/clumsy
 	name="Clumsiness"
@@ -92,8 +92,8 @@
 	mutation=M_CLUMSY
 	flags = GENE_UNNATURAL // Clown-specific.
 
-	New()
-		block=CLUMSYBLOCK
+/datum/dna/gene/disability/clumsy/New()
+	block=CLUMSYBLOCK
 
 /datum/dna/gene/disability/tourettes
 	name="Tourettes"
@@ -102,8 +102,8 @@
 	disability=TOURETTES
 	flags = GENE_UNNATURAL // Game-wrecking
 
-	New()
-		block=TWITCHBLOCK
+/datum/dna/gene/disability/tourettes/New()
+	block=TWITCHBLOCK
 
 /datum/dna/gene/disability/nervousness
 	name="Nervousness"
@@ -111,8 +111,8 @@
 	deactivation_message = "You feel calmer."
 	disability=NERVOUS
 
-	New()
-		block=NERVOUSBLOCK
+/datum/dna/gene/disability/nervousness/New()
+	block=NERVOUSBLOCK
 
 /datum/dna/gene/disability/nervousness/OnMobLife(mob/living/carbon/carbon)
 	..()
@@ -127,8 +127,8 @@
 	sdisability=BLIND
 	flags = GENE_UNNATURAL
 
-	New()
-		block=BLINDBLOCK
+/datum/dna/gene/disability/blindness/New()
+	block=BLINDBLOCK
 
 /datum/dna/gene/disability/deaf
 	name="Deafness"
@@ -137,12 +137,12 @@
 	sdisability=DEAF
 	flags = GENE_UNNATURAL
 
-	New()
-		block=DEAFBLOCK
+/datum/dna/gene/disability/deaf/New()
+	block=DEAFBLOCK
 
-	activate(var/mob/M, var/connected, var/flags)
-		..(M,connected,flags)
-		M.ear_deaf = 1
+/datum/dna/gene/disability/deaf/activate(var/mob/M, var/connected, var/flags)
+	..(M,connected,flags)
+	M.ear_deaf = 1
 
 /datum/dna/gene/disability/nearsighted
 	name="Nearsightedness"
@@ -150,8 +150,8 @@
 	deactivation_message = "Your eyes no longer feel weird..."
 	disability=NEARSIGHTED
 
-	New()
-		block=GLASSESBLOCK
+/datum/dna/gene/disability/nearsighted/New()
+	block=GLASSESBLOCK
 
 
 /datum/dna/gene/disability/lisp
@@ -160,9 +160,9 @@
 	activation_message = "Thomething doethn't feel right."
 	deactivation_message = "You now feel able to pronounce consonants."
 
-	New()
-		..()
-		block=LISPBLOCK
+/datum/dna/gene/disability/lisp/New()
+	..()
+	block=LISPBLOCK
 
-	OnSay(var/mob/M, var/datum/speech/speech)
-		speech.message = replacetext(speech.message,"s","th")
+/datum/dna/gene/disability/lisp/OnSay(var/mob/M, var/datum/speech/speech)
+	speech.message = replacetext(speech.message,"s","th")
