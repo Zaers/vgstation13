@@ -73,6 +73,15 @@ var/global/list/battery_online =	list(
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY
 
+/obj/machinery/power/battery/New()
+	. = ..()
+	power_machines -= src
+	batteries |= src
+
+/obj/machinery/power/battery/Destroy()
+	batteries -= src
+	. = ..()
+
 /obj/machinery/power/battery/RefreshParts()
 	var/capcount = 0
 	var/lasercount = 0

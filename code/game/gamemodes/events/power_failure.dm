@@ -3,7 +3,7 @@
 	suspend_alert = 1
 	if(announce)
 		command_alert(/datum/command_alert/power_outage)
-	for(var/obj/machinery/power/battery/smes/S in power_machines)
+	for(var/obj/machinery/power/battery/smes/S in batteries)
 		if(istype(get_area(S), /area/turret_protected) || S.z != map.zMainStation)
 			continue
 		S.stat |= FORCEDISABLE
@@ -57,7 +57,7 @@
 		if(C.cell && C.z == map.zMainStation)
 			C.cell.charge = Clamp(C.cell.charge, C.old_charge, C.cell.maxcharge)
 			C.chargemode = 1
-	for(var/obj/machinery/power/battery/smes/S in power_machines)
+	for(var/obj/machinery/power/battery/smes/S in batteries)
 		if(S.z != map.zMainStation)
 			continue
 		S.stat &= ~FORCEDISABLE
