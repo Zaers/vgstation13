@@ -1161,7 +1161,7 @@ Pressure: [env.return_pressure()]"}
 
 	sleep(50) //Extra five seconds for the radiation collectors to get their shit together
 
-	for(var/obj/machinery/power/battery/smes/SMES in power_machines)
+	for(var/obj/machinery/power/battery/smes/SMES in batteries)
 		if(SMES.anchored)
 			SMES.connect_to_network() //Just in case.
 			SMES.chargemode = 1
@@ -1178,7 +1178,7 @@ Pressure: [env.return_pressure()]"}
 	log_admin("[key_name(usr)] haxed the powergrid with magic SMES.")
 	message_admins("<span class='notice'>[key_name_admin(usr)] haxed the powergrid with magic SMES.</span>", 1)
 
-	for(var/obj/machinery/power/battery/smes/SMES in power_machines)
+	for(var/obj/machinery/power/battery/smes/SMES in batteries)
 		var/turf/T=SMES.loc
 		del(SMES)
 		var/obj/machinery/power/battery/smes/infinite/magic = new(T)

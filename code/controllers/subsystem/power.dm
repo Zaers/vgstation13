@@ -1,6 +1,7 @@
 var/datum/subsystem/power/SSpower
 
 var/list/power_machines = list()
+var/list/batteries = list()
 var/list/datum/powernet/powernets = list() //Holds all powernet datums in use or pooled
 var/list/cable_list = list() //Index for all cables, so that powernets don't have to look through the entire world all the time
 
@@ -15,6 +16,7 @@ var/list/cable_list = list() //Index for all cables, so that powernets don't hav
 	var/list/currentrun_cables
 	var/list/currentrun_powerents
 	var/list/currentrun_power_machines
+	var/list/currentrun_batteries
 
 
 /datum/subsystem/power/New()
@@ -22,7 +24,7 @@ var/list/cable_list = list() //Index for all cables, so that powernets don't hav
 
 
 /datum/subsystem/power/stat_entry()
-	..("C:[cable_list.len]|PN:[powernets.len]|PM:[power_machines.len]")
+	..("C:[cable_list.len]|PN:[powernets.len]|PM:[power_machines.len]|B:[batteries.len]")
 
 
 /datum/subsystem/power/Initialize(timeofday)
@@ -35,6 +37,7 @@ var/list/cable_list = list() //Index for all cables, so that powernets don't hav
 		currentrun_cables         = global.cable_list.Copy()
 		currentrun_powerents      = global.powernets.Copy()
 		currentrun_power_machines = global.power_machines.Copy()
+		currentrun_batteries = global.batteries.Copy()
 
 	// First we reset the powernets.
 	// This is done first because we want the power machinery to have acted last on the powernet between intervals.
@@ -89,6 +92,30 @@ var/list/cable_list = list() //Index for all cables, so that powernets don't hav
 				C.inMachineList = FALSE
 				power_machines.Remove(C)
 				continue
+
+		if (MC_TICK_CHECK)
+			return
+	// After that we do batteries so they don't ghetto powersink the powernet
+	while (currentrun_batteries.len)
+		var/datum/X = currentrun_batteries[currentrun_batteries.len]
+		currentrun_batteries.len--
+		if (!X || X.gcDestroyed || X.disposed)
+			continue
+
+		if (istype(X, /obj/machinery))
+			var/obj/machinery/M = X
+			if (M.timestopped)
+				continue
+
+			M.check_rebuild() //Checks to make sure the powernet doesn't need to be rebuilt, rebuilds it if it does
+
+			if (M.process() == PROCESS_KILL)
+				M.inMachineList = FALSE
+				power_machines.Remove(M)
+				continue
+
+			if (M.use_power)
+				M.auto_use_power()
 
 		if (MC_TICK_CHECK)
 			return
