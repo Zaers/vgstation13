@@ -93,7 +93,6 @@ atom/movable/proc/check_airflow_movable(n)
 		return 0
 	if(!istype(src,/obj/item) && n < zas_settings.Get(/datum/ZAS_Setting/airflow_dense_pressure))
 		return 0
-
 	return 1
 
 mob/check_airflow_movable(n)
@@ -326,6 +325,7 @@ proc/AirflowSpace(zone/A)
 			if(!isturf(loc))
 				break
 			step_towards(src, src.airflow_dest)
+			src.set_inertia(dir)
 			if(ismob(src) && src:client)
 				var/mob/M = src
 				M.delayNextMove(zas_settings.Get(/datum/ZAS_Setting/airflow_mob_slowdown))
@@ -385,6 +385,7 @@ proc/AirflowSpace(zone/A)
 			if (!isturf(loc))
 				break
 			step_towards(src, src.airflow_dest)
+			src.set_inertia(dir)
 			if(ismob(src) && src:client)
 				var/mob/M = src
 				M.delayNextMove(zas_settings.Get(/datum/ZAS_Setting/airflow_mob_slowdown))
